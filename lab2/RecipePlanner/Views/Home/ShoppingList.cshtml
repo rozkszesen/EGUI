@@ -1,0 +1,39 @@
+@using RecipePlanner.Models
+
+@{
+    ViewData["Title"] = "Make Shopping List";
+}
+
+<h2>Available recipes:</h2>
+<div class="container" style="width: 100%;">
+    <table class="table" style="width: 100%;">
+        @foreach (RecipeModel recipe in ViewBag.Recipes)
+        {
+            <tr>
+                <td scope="row" style="width: 60%">
+                    @recipe.name
+                </td>
+                <td scope="row" style="width: 20%;">
+                    <a asp-controller="Home" asp-action="addToShopping" asp-route-recipeToAdd=@recipe.name >
+                        <button class="addbtn">
+                            +
+                        </button>
+                    </a> 
+                </td>
+                <td scope="row" style="width: 20%;">
+                    <a asp-controller="Home" asp-action="removeFromShopping" asp-route-recipeToRemove=@recipe.name >
+                        <button class="rembtn">
+                            -
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<h2>Shopping list:</h2>
+
+
+
+

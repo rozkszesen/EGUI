@@ -1,0 +1,64 @@
+﻿@using RecipePlanner.Models
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<a asp-controller = "Home" asp-action = "AddRecipe" asp-area="">
+    <button type="button" class="btn btn-primary" style="width: 25%;"> Add new recipe </button>
+</a>
+
+<h2>Recipes:</h2>
+
+<div style="width: 100%;">
+<table class="table" style="width: 100%;">
+<thead >
+  <tr>
+    <th scope="col" style="width: 10%;">
+        Name
+    </th>
+    <th scope="col" style="width: 55%;">
+        Description
+    </th>
+    <th scope="col" style="width: 30%;">
+        Ingredients
+    </th>
+    <th scope="col" style="width: 5%;">
+        Actions
+    </th>
+  </tr>
+</thead>
+
+<tbody>
+    @foreach (RecipeModel recipe in ViewBag.Recipes)
+    {
+    <tr>
+        <td scope="row">
+            @recipe.name
+        </td>
+            
+        <td scope="row">
+            @recipe.description
+        </td>
+    
+        <td scope="row">
+            @foreach(IngredientModel ingredient in recipe.ingredients)
+            {
+                <p>
+                    @ingredient.product: @ingredient.quantity @ingredient.unit
+                </p>
+            }
+        </td>
+        <td scope="row">
+            <a asp-controller = "Home" asp-action = "EditRecipe" asp-route-recipeToEdit=@recipe.name>
+                <button type="button" class="btn btn-primary" style="width: 100%; margin: 10px;"> Edit </button>
+            </a>
+            <a asp-controller = "Home" asp-action = "DeleteRecipe" asp-route-recipeToDelete=@recipe.name>
+                <button type="button" class="btn btn-danger" style="width: 100%; margin: 10px;"> Delete </button>
+            </a>
+        </td>
+    </tr>
+    }
+</tbody>
+</table>
+</div>

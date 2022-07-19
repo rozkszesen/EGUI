@@ -1,0 +1,103 @@
+@using RecipePlanner.Models
+
+@{
+    ViewData["Title"] = "Add recipe";
+}
+
+@functions{
+    public object getNameDescription()
+    {
+        string nameInput = Context.Request.Query["nameInput"];
+        string descriptionInput = Context.Request.Query["descriptionInput"];
+
+        return new
+        {
+            nameInput,
+            descriptionInput,
+        };
+    }
+
+    public object getIngredient()
+    {
+        var productInput = Context.Request.Query["productInput"];
+        var quantityInput = Context.Request.Query["quantityInput"];
+        var unitInput = Context.Request.Query["unitInput"];
+
+        return new
+        {
+            productInput,
+            quantityInput,
+            unitInput,
+        };
+    }
+}
+
+
+<div class = "container">
+
+@using (Html.BeginForm("SaveEditedRecipe", "Home", getNameDescription()))
+{
+    <div>
+        <label for="exampleFormControlInput1">Name</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" name = "nameInput" required value = @Context.Request.Query["nameInput"]>
+    </div>
+
+    <div>
+        <label for="exampleFormControlTextarea1">Description</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" name = "descriptionInput" rows="6" required value = @Context.Request.Query["descriptionInput"]>
+        </textarea>
+    </div>
+
+    <table class="table" style="width: 100%;"> 
+        <tbody>
+            @foreach(IngredientModel ingredient in ViewBag.recipeToAdd.ingredients)
+            {
+            <tr>
+                <td scope="row">
+                    @ingredient.product: @ingredient.quantity @ingredient.unit
+                </td>
+                <td scope="row">
+                    <a asp-controller = "Home" asp-action = "DeleteIngredient" asp-route-ingredientToDelete=@ingredient.product>
+                    <button type="button" class="btn btn-danger" style="width: 100%; margin: 10px;"> Remove </button>
+                    </a>
+                </td>
+            </tr>
+            }
+    </table> 
+     <div>
+        <tr>
+            <input type="submit" value="Save whole recipe" />
+        @using (Html.BeginForm("Cancel", "Home"))
+        {
+            <input type="submit" value="Cancel"/>
+        }
+        </tr>
+    </div>   
+}
+
+</div>
+
+<table class = "table" style = "width 100%;">
+     @using (Html.BeginForm("AddIngredient", "Home", getIngredient())) 
+    {
+        <tr>
+            <td style = "width 30%;">
+                <label>Product</label>
+                <input type="text" class="form-control" name = "productInput" required value = @Context.Request.Query["productInput"]>
+            </td>
+            <td style = "width 10%;">
+                <label>Quantity</label>
+                <input type="number" step="0.01" class="form-control" name = "quantityInput" required value = @Context.Request.Query["quantityInput"].ToString()>
+            </td>
+            <td style = "width 30%;">
+                <label>Unit</label>
+                <input type="text" class="form-control"name = "unitInput" required value = @Context.Request.Query["unitInput"]>
+            </td>
+            <td style = "width 30%;">
+                <a asp-area="" asp-controller="Home" asp-action="AddIngredient">
+                    <button  class="btn btn-primary"> Add Ingredient </button>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
